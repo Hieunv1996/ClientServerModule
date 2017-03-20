@@ -1,5 +1,4 @@
-package com.hieunv.ltht;
-
+package chatmodule;
 
 import java.io.*;
 import java.net.Socket;
@@ -7,11 +6,10 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
- * Created by HieuNguyen on 02/25/2017.
+ * Created by Hieu Nguyen on 3/20/2017.
  */
-public class ClientSide {
+public class Client {
     public static void main(String[] args) {
-
         final String serverHost = "localhost";
         final int port = 7777;
         Socket socketOfClient = null;
@@ -45,20 +43,18 @@ public class ClientSide {
         }
         System.out.println("Connect to " + serverHost + ":" + port + " success!");
         try {
+            new RecieveMessage(socketOfClient,is,"Server").start();
             while (true) {
-                if(sc.hasNext()){
                     message.append(sc.nextLine());
                     os.write(message.toString());
                     os.newLine();
                     os.flush();
                     message.setLength(0);
-                }
-                System.out.println("Server: "+is.readLine());
             }
         } catch (UnknownHostException e) {
             System.err.println("Trying to connect to unknown host: " + e);
         } catch (IOException e) {
-            System.err.println("IOException:  " + e);
+            System.err.println("Lost connect! Please check your connection.");
         }
     }
 }
